@@ -1,5 +1,6 @@
 use actix_web::{App, HttpServer, middleware::Logger, web::Data};
 use mongo_db::MongoRepo;
+use actix_cors::Cors;
 
 mod api;
 mod mongo_db;
@@ -15,9 +16,12 @@ async fn main() -> std::io::Result<()> {
     let db_data = Data::new(db);
 
     HttpServer::new(move || {
+        let cors = Cors::default().send_wildcard().allow_any_origin().allow_any_method().allow_any_header();
+
         let logger = Logger::default();
         App::new()
             .wrap(logger)
+            .wrap(cors)
             .app_data(db_data.clone())
             // add new routes here
             .service(api::grid_routes::get_grid)
