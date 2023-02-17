@@ -17,7 +17,7 @@ struct Point {
 #[function_component]
 fn App() -> Html {
     use_effect(move || {
-        let timers = gloo::timers::callback::Interval::new(5000, || {
+        let timers = gloo::timers::callback::Interval::new(1000, || {
             wasm_bindgen_futures::spawn_local(async {
                 let canvas = document()
                     .get_element_by_id("canvas")
@@ -53,8 +53,10 @@ fn App() -> Html {
     });
 
     html! {
-        <div>
-            <canvas id="canvas" width="4000" height="4000"></canvas>
-        </div>
+        <>
+            <div>
+                <canvas id="canvas" width="4000" height="4000"></canvas>
+            </div>
+        </>
     }
 }
