@@ -1,0 +1,17 @@
+[package]
+name = "server"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix = "0.13.0"
+actix-rt = "2.8.0"
+actix-web = "4.3.0"
+dotenv = "0.15.0"
+env_logger = "0.10.0"
+futures = "0.3.26"
+log = "0.4.17"
+mongodb = "2.3.1"
+serde = "1.0.152"
