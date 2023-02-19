@@ -1,7 +1,7 @@
-use std::time::{Duration, Instant};
+use std::time::{Instant};
 
 use actix::prelude::*;
-use actix_web_actors::ws::{self, WebsocketContext};
+use actix_web_actors::ws::{self};
 
 use crate::{
     models::{
@@ -24,8 +24,6 @@ impl Actor for Socket {
     type Context = ws::WebsocketContext<Self>;
 
     fn started(&mut self, ctx: &mut Self::Context) {
-        self.hb(ctx);
-
         let addr = ctx.address();
         self.data
             .send(Connect {
@@ -43,7 +41,7 @@ impl Actor for Socket {
             .wait(ctx);
     }
 
-    fn stopping(&mut self, ctx: &mut Self::Context) -> Running {
+    fn stopping(&mut self, _: &mut Self::Context) -> Running {
         self.data.do_send(Disconnect { id: self.id });
         Running::Stop
     }
@@ -62,11 +60,10 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for Socket {
                 let fut = async move {
                     db.create_or_update_point(point).await;
 
-                    let text = serde_json::to_string::<Vec<Point>>(db.get_all_points().await.as_ref()).unwrap();
-                    data.do_send(SocketMessage {
-                        id: id,
-                        text: text,
-                    });
+                    let text =
+                        serde_json::to_string::<Vec<Point>>(db.get_all_points().await.as_ref())
+                            .unwrap();
+                    data.do_send(SocketMessage { id: id, text: text });
                 };
                 let fut = actix::fut::wrap_future::<_, Self>(fut);
                 ctx.spawn(fut);
@@ -88,32 +85,5 @@ impl Handler<SocketMessage> for Socket {
 
     fn handle(&mut self, msg: SocketMessage, ctx: &mut Self::Context) {
         ctx.text(msg.text);
-    }
-}
-
-/// How often heartbeat pings are sent
-const HEARTBEAT_INTERVAL: Duration = Duration::from_secs(5);
-
-/// How long before lack of client response causes a timeout
-const CLIENT_TIMEOUT: Duration = Duration::from_secs(10);
-impl Socket {
-    fn hb(&self, ctx: &mut ws::WebsocketContext<Self>) {
-        /*         ctx.run_interval(HEARTBEAT_INTERVAL, |act, ctx| {
-            // check client heartbeats
-            if Instant::now().duration_since(act.hb) > CLIENT_TIMEOUT {
-                // heartbeat timed out
-                log::debug!("Websocket Client heartbeat failed, disconnecting!");
-
-                act.data.do_send(Disconnect { id: act.id });
-
-                // stop actor
-                ctx.stop();
-
-                // don't try to send a ping
-                return;
-            }
-
-            ctx.ping(b"");
-        }); */
     }
 }
