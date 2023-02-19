@@ -212,6 +212,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "actix-web-actors"
+version = "4.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bf6e9ccc371cfddbed7aa842256a4abc7a6dcac9f3fce392fe1d0f68cfd136b2"
+dependencies = [
+ "actix",
+ "actix-codec",
+ "actix-http",
+ "actix-web",
+ "bytes",
+ "bytestring",
+ "futures-core",
+ "pin-project-lite",
+ "tokio",
+ "tokio-util",
+]
+
+[[package]]
 name = "actix-web-codegen"
 version = "4.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1639,6 +1657,7 @@ dependencies = [
  "actix-cors",
  "actix-rt",
  "actix-web",
+ "actix-web-actors",
  "dotenv",
  "env_logger",
  "futures",

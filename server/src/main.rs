@@ -1,4 +1,5 @@
-use actix_web::{App, HttpServer, middleware::Logger, web::Data};
+use actix_web::{App, HttpServer, middleware::Logger, web::{Data, self}};
+use api::socket::grid_socket_index;
 use mongo_db::MongoRepo;
 use actix_cors::Cors;
 
@@ -26,6 +27,7 @@ async fn main() -> std::io::Result<()> {
             // add new routes here
             .service(api::grid_routes::get_grid)
             .service(api::grid_routes::post_grid)
+            .route("/ws/grid/", web::get().to(grid_socket_index))
     })
     .bind(("localhost", 80))?
     .run()
