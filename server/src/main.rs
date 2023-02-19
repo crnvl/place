@@ -1,5 +1,5 @@
 use actix_web::{App, HttpServer, middleware::Logger, web::{Data, self}};
-use api::socket::grid_socket_index;
+use api::socket::{grid_socket_index, SocketData};
 use mongo_db::MongoRepo;
 use actix_cors::Cors;
 
@@ -13,8 +13,11 @@ async fn main() -> std::io::Result<()> {
     std::env::set_var("RUST_BACKTRACE", "1");
     env_logger::init();
     
+    // database fun
     let db = MongoRepo::init().await;
-    let db_data = Data::new(db);
+    let db_data = web::Data::new(db);
+
+    let ws_data = Data::new(SocketData::new());
 
     HttpServer::new(move || {
         let cors = Cors::default().send_wildcard().allow_any_origin().allow_any_method().allow_any_header();
@@ -24,6 +27,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(logger)
             .wrap(cors)
             .app_data(db_data.clone())
+            .app_data(ws_data.clone())
             // add new routes here
             .service(api::grid_routes::get_grid)
             .service(api::grid_routes::post_grid)
