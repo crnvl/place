@@ -5,6 +5,7 @@ use mongodb::{Client, Collection, bson::doc};
 
 use crate::models::point::Point;
 
+#[derive(Clone)]
 pub struct MongoRepo {
     pub points: Collection<Point>,
 }
@@ -46,5 +47,22 @@ impl MongoRepo {
             )
             .await
             .unwrap()
+    }
+
+    pub async fn create_or_update_point(&self, point: Point) {
+        let result = self.points.find_one(doc! {"x": point.x, "y": point.y}, None).await.unwrap();
+
+        if result.is_none() {
+            self.points.insert_one(point, None).await.unwrap();
+        }else {
+            self.points
+                .update_one(
+                    doc! {"x": point.x, "y": point.y},
+                    doc! {"$set": {"color": point.color}},
+                    None,
+                )
+                .await
+                .unwrap();
+        }
     }
 }

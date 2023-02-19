@@ -8,7 +8,7 @@ use actix_web::{
 use actix_web_actors::ws;
 use rand::Rng;
 
-use crate::actors::socket::Socket;
+use crate::{actors::socket::Socket, mongo_db::MongoRepo};
 use crate::actors::socket_data::SocketData;
 use crate::models::socket_messages::{Connect, Disconnect, SocketMessage};
 
@@ -49,6 +49,7 @@ pub async fn grid_socket_index(
         Socket {
             id: 0,
             data: socket_data.get_ref().clone(),
+            db: MongoRepo::init().await,
             hb: Instant::now(),
         },
         &req,

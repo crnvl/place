@@ -1,15 +1,22 @@
 use std::time::{Duration, Instant};
 
 use actix::prelude::*;
-use actix_web_actors::ws;
+use actix_web_actors::ws::{self, WebsocketContext};
 
-use crate::models::socket_messages::{Disconnect, Connect, SocketMessage};
+use crate::{
+    models::{
+        point::Point,
+        socket_messages::{Connect, Disconnect, SocketMessage},
+    },
+    mongo_db::MongoRepo,
+};
 
 use super::socket_data::SocketData;
 
 pub struct Socket {
     pub id: usize,
     pub data: Addr<SocketData>,
+    pub db: MongoRepo,
     pub hb: Instant,
 }
 
@@ -35,7 +42,7 @@ impl Actor for Socket {
             })
             .wait(ctx);
     }
-    
+
     fn stopping(&mut self, ctx: &mut Self::Context) -> Running {
         self.data.do_send(Disconnect { id: self.id });
         Running::Stop
@@ -47,17 +54,30 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for Socket {
         log::debug!("Websocket message: {:?}", msg);
         match msg {
             Ok(ws::Message::Text(text)) => {
-                let m = text.trim();
+                let point: Point = serde_json::from_str(&text).unwrap();
 
-                self.data.do_send(SocketMessage { id: self.id, text: m.to_string() });
-            },
+                let db = self.db.clone();
+                let data = self.data.clone();
+                let id = self.id.clone();
+                let fut = async move {
+                    db.create_or_update_point(point).await;
+
+                    let text = serde_json::to_string::<Vec<Point>>(db.get_all_points().await.as_ref()).unwrap();
+                    data.do_send(SocketMessage {
+                        id: id,
+                        text: text,
+                    });
+                };
+                let fut = actix::fut::wrap_future::<_, Self>(fut);
+                ctx.spawn(fut);
+            }
             Ok(ws::Message::Close(reason)) => {
                 ctx.close(reason);
                 ctx.stop();
-            },
+            }
             Ok(ws::Message::Continuation(_)) => {
                 ctx.stop();
-            },
+            }
             _ => (),
         }
     }
@@ -78,12 +98,12 @@ const HEARTBEAT_INTERVAL: Duration = Duration::from_secs(5);
 const CLIENT_TIMEOUT: Duration = Duration::from_secs(10);
 impl Socket {
     fn hb(&self, ctx: &mut ws::WebsocketContext<Self>) {
-        ctx.run_interval(HEARTBEAT_INTERVAL, |act, ctx| {
+        /*         ctx.run_interval(HEARTBEAT_INTERVAL, |act, ctx| {
             // check client heartbeats
             if Instant::now().duration_since(act.hb) > CLIENT_TIMEOUT {
                 // heartbeat timed out
                 log::debug!("Websocket Client heartbeat failed, disconnecting!");
-                
+
                 act.data.do_send(Disconnect { id: act.id });
 
                 // stop actor
@@ -94,6 +114,6 @@ impl Socket {
             }
 
             ctx.ping(b"");
-        });
+        }); */
     }
 }

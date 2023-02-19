@@ -3,12 +3,11 @@ use std::collections::HashMap;
 use actix::{Context, Actor, Recipient};
 use rand::rngs::ThreadRng;
 
-use crate::models::socket_messages::SocketMessage;
+use crate::{models::{socket_messages::SocketMessage, point::Point}, mongo_db::MongoRepo};
 
-#[derive(Debug)]
 pub struct SocketData {
     pub sessions: HashMap<usize, Recipient<SocketMessage>>,
-    pub rng: ThreadRng,
+    pub rng: ThreadRng
 }
 
 impl SocketData {

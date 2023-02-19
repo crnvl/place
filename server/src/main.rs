@@ -1,7 +1,6 @@
 use actix::Actor;
 use actix_web::{App, HttpServer, middleware::Logger, web::{Data, self}};
 use api::socket::{grid_socket_index};
-use mongo_db::MongoRepo;
 use actix_cors::Cors;
 use actors::socket_data::SocketData;
 
@@ -15,10 +14,6 @@ async fn main() -> std::io::Result<()> {
     std::env::set_var("RUST_LOG", "debug");
     std::env::set_var("RUST_BACKTRACE", "1");
     env_logger::init();
-    
-    // database fun
-    let db = MongoRepo::init().await;
-    let db_data = web::Data::new(db);
 
     let ws_data = Data::new(SocketData::new().start());
 
@@ -29,7 +24,6 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .wrap(logger)
             .wrap(cors)
-            .app_data(db_data.clone())
             .app_data(ws_data.clone())
             // add new routes here
             .service(api::grid_routes::get_grid)
