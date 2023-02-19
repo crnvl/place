@@ -32,6 +32,7 @@ export default defineComponent({
   name: "App",
   setup() {
     const ws = new WebSocket("ws://localhost:80/ws/grid/");
+
     const colorOptions = {
       red: "231, 76, 60",
       orange: "230, 126, 34",
@@ -56,6 +57,10 @@ export default defineComponent({
         ctx.fillRect(pixel.x, pixel.y, 1, 1);
       }
     };
+
+    setTimeout(() => {
+      ws.send(`{"x": -1, "y": -1, "color": 0}`);
+    }, 50);
 
     return {
       activePixel: ref(""),
