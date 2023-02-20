@@ -14,7 +14,7 @@
         :key="color"
         :class="color"
         @click="changePixel(color)"
-        :style="{ background: 'rgb(' + colorOptions[color] + ')' }"
+        :style="{ background: '' + colorOptions[color] + '' }"
       ></button>
     </nav>
   </div>
@@ -34,16 +34,40 @@ export default defineComponent({
     const ws = new WebSocket("wss://place.angelsflyinhell.dev/");
 
     const colorOptions = {
-      red: "231, 76, 60",
-      orange: "230, 126, 34",
-      yellow: "241, 196, 15",
-      green: "46, 204, 113",
-      blue: "52, 152, 219",
-      purple: "155, 89, 182",
-      white: "255, 255, 255",
-      black: "44, 62, 80",
-      pink: "242, 155, 231",
+      black: "#000000",
+      darkBlue: "#353658",
+      grey: "#686b72",
+      grey2: "#8b97b6",
+      grey3: "#c5cddb",
+      white: "#ffffff",
+      lightBlue: "#5ee9e9",
+      blue: "#2890dc",
+      darkBlue2: "#1831a7",
+      darkGreen: "#053239",
+      darkGreen2: "#005f41",
+      green: "#08b23b",
+      green2: "#47f641",
+      yellow: "#e8ff75",
+      orange: "#fbbe82",
+      orange2: "#de9751",
+      brown: "#b66831",
+      brown2: "#8a4926",
+      brown3: "#461c14",
+      darkBrown: "#1e090d",
+      darkRed: "#720d0d",
+      brown4: "#813704",
+      red: "#da2424",
+      orange3: "#ef6e10",
+      orange4: "#ecab11",
+      yellow2: "#ece910",
+      pink: "#f78d8d",
+      pink2: "#f94e6d",
+      pink3: "#c12458",
+      magenta: "#841252",
+      purple: "#3d083b",
     };
+
+    // print the colorOptions array
 
     ws.onmessage = (e) => {
       let ctx = (
@@ -54,7 +78,7 @@ export default defineComponent({
       let data = JSON.parse(e.data);
       for (let i = 0; i < data.length; i++) {
         let pixel = data[i];
-        ctx.fillStyle = `rgb(${Object.values(colorOptions)[pixel.color]})`;
+        ctx.fillStyle = `${Object.values(colorOptions)[pixel.color]}`;
         ctx.fillRect(pixel.x, pixel.y, 1, 1);
       }
     };
@@ -85,7 +109,7 @@ export default defineComponent({
       ).getContext("2d");
       if (!ctx) return;
 
-      ctx.fillStyle = `rgb(${this.colorOptions[color]})`;
+      ctx.fillStyle = `${this.colorOptions[color]}`;
 
       let [x, y] = this.activePixel.split(":");
       ctx.fillRect(parseInt(x), parseInt(y), 1, 1);
