@@ -4,7 +4,8 @@ services:
     image: "ghcr.io/angelsflyinhell/place_server:latest"
     container_name: place_server
     restart: always
-    network_mode: host
+    ports:
+      - "9000:80"
     environment:
       MONGO_URI: mongodb://your:mongo@uri:27017/place
   web:

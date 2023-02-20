@@ -28,7 +28,7 @@ async fn main() -> std::io::Result<()> {
             // add new routes here
             .route("/ws/grid/", web::get().to(grid_socket_index))
     })
-    .bind(("localhost", 9000))?
+    .bind(("0.0.0.0", 9000))?
     .run()
     .await
 }
