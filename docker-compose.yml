@@ -1,13 +1,14 @@
 version: '3'
 services:
   server:
-    image: "ghcr.io/angelsflyinhell/place_server:latest"
+    image: "docker pull ghcr.io/angelsflyinhell/place-ts-server:latest"
     container_name: place_server
     restart: always
     ports:
       - "9000:80"
     environment:
       MONGO_URI: mongodb://your:mongo@uri:27017/place
+      PORT: 9000
   web:
     image: "ghcr.io/angelsflyinhell/place_client:latest"
     container_name: place_client
