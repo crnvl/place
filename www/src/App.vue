@@ -42,7 +42,7 @@ export default defineComponent({
       purple: "155, 89, 182",
       white: "255, 255, 255",
       black: "44, 62, 80",
-      pink: "250, 102, 255",
+      pink: "242, 155, 231",
     };
 
     ws.onmessage = (e) => {
