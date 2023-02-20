@@ -4,6 +4,6 @@ WORKDIR /usr/src
 COPY . . 
 
 RUN cargo install --path .
-EXPOSE 8080
+EXPOSE 80
 
 CMD ["cargo", "run"]

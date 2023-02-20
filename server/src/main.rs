@@ -26,11 +26,9 @@ async fn main() -> std::io::Result<()> {
             .wrap(cors)
             .app_data(ws_data.clone())
             // add new routes here
-            .service(api::grid_routes::get_grid)
-            .service(api::grid_routes::post_grid)
             .route("/ws/grid/", web::get().to(grid_socket_index))
     })
-    .bind(("localhost", 8080))?
+    .bind(("localhost", 80))?
     .run()
     .await
 }

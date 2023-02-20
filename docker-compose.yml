@@ -5,7 +5,7 @@ services:
     container_name: place_server
     restart: always
     ports:
-      - "9002:8080"
+      - "80:80"
     environment:
       MONGO_URI: mongodb://your:mongo@uri:27017/place
   web:
