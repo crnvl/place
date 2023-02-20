@@ -31,7 +31,7 @@ import { defineComponent, reactive, ref } from "vue";
 export default defineComponent({
   name: "App",
   setup() {
-    const ws = new WebSocket("ws://95.111.231.242:9000/ws/grid/");
+    const ws = new WebSocket("wss://95.111.231.242:9000/ws/grid/");
 
     const colorOptions = {
       red: "231, 76, 60",
@@ -60,7 +60,7 @@ export default defineComponent({
 
     setTimeout(() => {
       ws.send(`{"x": -1, "y": -1, "color": 0}`);
-    }, 50);
+    }, 500);
 
     return {
       activePixel: ref(""),
