@@ -40,7 +40,7 @@ export default defineComponent({
       green: "46, 204, 113",
       blue: "52, 152, 219",
       purple: "155, 89, 182",
-      white: "236, 240, 241",
+      white: "255, 255, 255",
       black: "44, 62, 80",
       ping: "250, 102, 255"
     };
