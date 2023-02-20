@@ -42,6 +42,7 @@ export default defineComponent({
       purple: "155, 89, 182",
       white: "236, 240, 241",
       black: "44, 62, 80",
+      ping: "250, 102, 255"
     };
 
     ws.onmessage = (e) => {
