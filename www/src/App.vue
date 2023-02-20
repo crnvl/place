@@ -83,10 +83,6 @@ export default defineComponent({
       }
     };
 
-    setTimeout(() => {
-      ws.send(`{"x": -1, "y": -1, "color": 0}`);
-    }, 500);
-
     return {
       activePixel: ref(""),
       colorOptions,
