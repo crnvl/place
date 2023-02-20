@@ -6,6 +6,7 @@ import { Point } from "./pointModel";
 import { connect } from "mongoose";
 
 const app = express();
+
 dotenv.config();
 
 const server = http.createServer(app);

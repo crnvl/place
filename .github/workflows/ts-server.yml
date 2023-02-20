@@ -18,7 +18,7 @@ jobs:
     - name: Build and push the Docker image
       uses: mr-smithers-excellent/docker-build-push@v5
       with:
-        image: place-ts-server
+        image: place_ts_server
         tags: latest
         dockerfile: 'ts-server/Dockerfile'
         directory: 'ts-server'
