@@ -6,5 +6,7 @@ WORKDIR /usr/src/
 # Copy the files and install dependencies
 COPY . .
 RUN npm install
+RUN npm install typescript -g
+RUN npm install ts-node -g
 CMD ["npm", "run", "start"]
 # docker run -p 3004:3000 -d clash_backend
