@@ -151,9 +151,9 @@ body {
   background-color: #fff;
   position: fixed;
   bottom: 0;
-  left: 0;
   width: 100%;
-  padding: 1rem;
+  padding-bottom: 2rem;
+  padding-top: 2rem;
   text-align: center;
   z-index: 2;
   border-top: 1px solid #000;
