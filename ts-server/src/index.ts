@@ -41,7 +41,9 @@ wss.on("connection", async (ws: WebSocket) => {
 
 server.listen(process.env.PORT, async () => {
   console.log(`Server started on port ${process.env.PORT}`);
-  await connect(process.env.MONGO_URI || "");
+  await connect(process.env.MONGO_URI || "").then(() => {
+    console.log("Connected to MongoDB");
+  });
 });
 
 const getPoints = async () => {
