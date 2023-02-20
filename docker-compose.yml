@@ -1,7 +1,7 @@
 version: '3'
 services:
   server:
-    image: "docker pull ghcr.io/angelsflyinhell/place_ts_server:latest"
+    image: "ghcr.io/angelsflyinhell/place_ts_server:latest"
     container_name: place_server
     restart: always
     ports:
