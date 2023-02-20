@@ -7,6 +7,7 @@ import { connect } from "mongoose";
 
 const app = express();
 dotenv.config();
+
 const server = http.createServer(app);
 
 const wss = new WebSocket.Server({ server });
