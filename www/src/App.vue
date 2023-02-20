@@ -31,7 +31,7 @@ import { defineComponent, reactive, ref } from "vue";
 export default defineComponent({
   name: "App",
   setup() {
-    const ws = new WebSocket("wss://place.angelsflyinhell.dev/ws/grid/");
+    const ws = new WebSocket("ws://95.111.231.242:9000/ws/grid/");
 
     const colorOptions = {
       red: "231, 76, 60",
