@@ -30,7 +30,7 @@ async fn main() -> std::io::Result<()> {
             .service(api::grid_routes::post_grid)
             .route("/ws/grid/", web::get().to(grid_socket_index))
     })
-    .bind(("localhost", 80))?
+    .bind(("localhost", 8080))?
     .run()
     .await
 }
