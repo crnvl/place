@@ -33,10 +33,19 @@ wss.on("connection", async (ws: WebSocket) => {
       const point = new Point(json);
       await point.save();
     }
-
-    broadcast(JSON.stringify(await getPoints()));
+    const existingPoint = await Point.findOne({ x: json.x, y: json.y });
+    let point = {
+      x: existingPoint?.x,
+      y: existingPoint?.y,
+      color: existingPoint?.color,
+    };
+    broadcast(JSON.stringify([point]));
   });
-  ws.send(JSON.stringify(await getPoints()));
+  
+  for (let i = 0; i < 1000 / 10; i++) {
+    const points = await getPointsRange(i * 10, i * 10 + 10, 0, 1000);
+    ws.send(JSON.stringify(points));
+  }
 });
 
 server.listen(process.env.PORT, async () => {
@@ -48,6 +57,24 @@ server.listen(process.env.PORT, async () => {
 
 const getPoints = async () => {
   const points = await Point.find({});
+  const pointsArray = [];
+
+  for (let point of points) {
+    pointsArray.push({
+      x: point.x,
+      y: point.y,
+      color: point.color,
+    });
+  }
+
+  return pointsArray;
+};
+
+const getPointsRange = async (x1: number, x2: number, y1: number, y2: number) => {
+  const points = await Point.find({
+    x: { $gte: x1, $lte: x2 },
+    y: { $gte: y1, $lte: y2 },
+  });
   const pointsArray = [];
 
   for (let point of points) {
