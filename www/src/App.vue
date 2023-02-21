@@ -1,8 +1,8 @@
 <template>
   <canvas
     id="canvas"
-    width="1000"
-    height="1000"
+    width="4000"
+    height="4000"
     ref="place"
     @click="draw"
   ></canvas>
