@@ -5,15 +5,15 @@
 
 version: 2
 updates:
-  - package-ecosystem: "" # See documentation for possible values
+  - package-ecosystem: "cargo" # See documentation for possible values
     directory: "/server" # Location of package manifests
     schedule:
       interval: "weekly"
-  - package-ecosystem: "" # See documentation for possible values
+  - package-ecosystem: "npm" # See documentation for possible values
     directory: "/ts-server" # Location of package manifests
     schedule:
       interval: "weekly"
-  - package-ecosystem: "" # See documentation for possible values
+  - package-ecosystem: "npm" # See documentation for possible values
     directory: "/www" # Location of package manifests
     schedule:
       interval: "weekly"
