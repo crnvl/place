@@ -2,7 +2,7 @@
   <canvas
     id="canvas"
     width="4000"
-    height="4000"
+    height="2000"
     ref="place"
     @click="draw"
   ></canvas>
