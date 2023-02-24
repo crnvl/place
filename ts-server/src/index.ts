@@ -42,8 +42,8 @@ wss.on("connection", async (ws: WebSocket) => {
     broadcast(JSON.stringify([point]));
   });
   
-  for (let i = 0; i < 4000 / 50; i++) {
-    for (let j = 0; j < 4000 / 1000; j++) {
+  for (let i = 0; i < 4000 / 10; i++) {
+    for (let j = 0; j < 2000 / 500; j++) {
       const points = await getPointsRange(i * 50, i * 50 + 50, j * 1000, j * 1000 + 1000);
       ws.send(JSON.stringify(points));
     }
